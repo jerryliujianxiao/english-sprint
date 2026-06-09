@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>牛津英语冲刺台 · Oxford English Sprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d212b; --line:#2a2f3a;
+    --ink:#e8eaed; --muted:#9aa3b2; --faint:#6b7280;
+    --accent:#5b8cff; --accent2:#7c9eff; --good:#34d399; --warn:#f59e0b; --bad:#f87171;
+    --gold:#e0b341;
+    --radius:14px; --shadow:0 8px 30px rgba(0,0,0,.35);
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f6f7f9; --panel:#ffffff; --panel2:#f0f2f6; --line:#e2e5ea;
+      --ink:#1a1d23; --muted:#5a6373; --faint:#8a93a3;
+      --accent:#2f6bff; --shadow:0 8px 30px rgba(20,30,60,.08);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Inter","Noto Sans SC",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent2); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 20px}
+
+  /* Header */
+  header{
+    position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(10px);
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    border-bottom:1px solid var(--line);
+  }
+  .hbar{display:flex; align-items:center; gap:14px; padding:12px 0}
+  .logo{font-weight:800; letter-spacing:.2px; font-size:17px; white-space:nowrap}
+  .logo .sub{color:var(--muted); font-weight:500; font-size:13px; margin-left:8px}
+  .countdown{margin-left:auto; display:flex; gap:18px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
+  .cd-item{text-align:center; line-height:1.1}
+  .cd-num{font-size:20px; font-weight:800; color:var(--accent2)}
+  .cd-lab{font-size:11px; color:var(--muted)}
+  nav.tabs{display:flex; gap:4px; overflow-x:auto; padding:6px 0 10px; scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  .tab{
+    flex:0 0 auto; padding:7px 13px; border-radius:10px; cursor:pointer;
+    color:var(--muted); font-size:13.5px; font-weight:600; white-space:nowrap;
+    border:1px solid transparent; user-select:none;
+  }
+  .tab:hover{color:var(--ink); background:var(--panel)}
+  .tab.active{color:#fff; background:var(--accent); border-color:var(--accent)}
+  @media (prefers-color-scheme: light){ .tab.active{color:#fff} }
+
+  /* Sections */
+  main{padding:26px 0 80px}
+  section{display:none; animation:fade .25s ease}
+  section.active{display:block}
+  @keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+
+  .h2{font-size:22px; font-weight:800; margin:4px 0 4px}
+  .lede{color:var(--muted); margin:0 0 20px; max-width:70ch}
+  .h3{font-size:15px; font-weight:700; color:var(--accent2); text-transform:uppercase; letter-spacing:.5px; margin:26px 0 12px}
+
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow)}
+  .grid{display:grid; gap:14px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:760px){ .g2,.g3,.g4{grid-template-columns:1fr} }
+
+  /* Daily blocks */
+  .block{display:flex; gap:14px; padding:16px; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); margin-bottom:12px}
+  .block .badge{flex:0 0 auto; width:42px; height:42px; border-radius:11px; display:grid; place-items:center; font-weight:800; font-size:18px; color:#fff; background:linear-gradient(135deg,var(--accent),#8a6bff)}
+  .block h4{margin:0 0 4px; font-size:16px}
+  .block .time{color:var(--accent2); font-weight:700; font-size:13px}
+  .block p{margin:6px 0 0; color:var(--muted); font-size:14px}
+  .tip{margin-top:14px; padding:12px 14px; border-left:3px solid var(--warn); background:var(--panel2); border-radius:8px; font-size:14px; color:var(--ink)}
+
+  /* Scenario cards */
+  .scn{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:15px; display:flex; flex-direction:column; gap:9px}
+  .scn.hot{border-color:color-mix(in srgb,var(--bad) 55%,var(--line))}
+  .scn .top{display:flex; align-items:flex-start; gap:8px}
+  .scn h4{margin:0; font-size:15.5px; line-height:1.35}
+  .scn .em{font-size:20px}
+  .scn .desc{color:var(--muted); font-size:13px; flex:1}
+  .pill{display:inline-block; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--panel2); color:var(--muted)}
+  .pill.hot{background:color-mix(in srgb,var(--bad) 18%,transparent); color:var(--bad)}
+  .pill.note{background:color-mix(in srgb,var(--gold) 18%,transparent); color:var(--gold)}
+  .btn{
+    appearance:none; border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+    font-family:inherit; font-weight:600; font-size:13.5px; padding:9px 14px; border-radius:10px; cursor:pointer;
+    transition:transform .05s ease, background .15s;
+  }
+  .btn:hover{background:var(--line)}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.sm{padding:6px 11px; font-size:12.5px}
+  .btn.ghost{background:transparent}
+  .btn-row{display:flex; gap:8px; flex-wrap:wrap}
+
+  /* Roadmap */
+  .week{border:1px solid var(--line); border-radius:12px; margin-bottom:10px; background:var(--panel); overflow:hidden}
+  .week summary{list-style:none; cursor:pointer; padding:14px 16px; display:flex; align-items:center; gap:12px}
+  .week summary::-webkit-details-marker{display:none}
+  .week .wk{flex:0 0 auto; font-size:12px; font-weight:800; color:#fff; background:var(--accent); padding:4px 9px; border-radius:8px}
+  .week .wk.p2{background:#8a6bff}
+  .week .wk.p3{background:var(--good)}
+  .week .wt{font-weight:700; font-size:15px}
+  .week .wsub{margin-left:auto; color:var(--muted); font-size:12.5px}
+  .week .body{padding:0 16px 16px; color:var(--muted); font-size:14px}
+  .week .body b{color:var(--ink)}
+  .week ul{margin:8px 0; padding-left:20px}
+  .week li{margin:4px 0}
+  .milestone{margin-top:10px; padding:10px 12px; background:var(--panel2); border-radius:8px; font-size:13.5px}
+  .milestone b{color:var(--good)}
+
+  /* Resources */
+  .res{border:1px solid var(--line); border-radius:12px; padding:14px; background:var(--panel)}
+  .res h4{margin:0 0 4px; font-size:15px}
+  .res .meta{color:var(--faint); font-size:12px; margin-bottom:6px}
+  .res p{margin:0; color:var(--muted); font-size:13.5px}
+  .star{color:var(--gold)}
+
+  /* Phrasebank */
+  .phrase{border:1px solid var(--line); border-radius:10px; padding:13px 15px; background:var(--panel); margin-bottom:9px}
+  .phrase .en{font-family:"Lora",serif; font-size:15.5px; color:var(--ink)}
+  .phrase .zh{color:var(--muted); font-size:13px; margin-top:3px}
+  .decode{display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-bottom:9px}
+  .decode>div{padding:11px 14px}
+  .decode .says{background:var(--panel); font-family:"Lora",serif; font-style:italic}
+  .decode .means{background:color-mix(in srgb,var(--bad) 10%,var(--panel)); border-left:1px solid var(--line)}
+  .decode .means b{color:var(--bad)}
+  @media (max-width:600px){ .decode{grid-template-columns:1fr} .decode .means{border-left:none; border-top:1px solid var(--line)} }
+
+  /* Forms / progress */
+  label{display:block; font-size:13px; font-weight:600; color:var(--muted); margin:0 0 5px}
+  input[type=text],input[type=date],input[type=number],select,textarea{
+    width:100%; background:var(--panel2); border:1px solid var(--line); color:var(--ink);
+    border-radius:10px; padding:10px 12px; font-family:inherit; font-size:14px; resize:vertical;
+  }
+  input:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--accent) 60%,transparent); outline-offset:1px; border-color:var(--accent)}
+  .field{margin-bottom:13px}
+  .stars{display:flex; gap:6px}
+  .stars .s{cursor:pointer; font-size:24px; color:var(--faint); user-select:none}
+  .stars .s.on{color:var(--gold)}
+  .log-item{border:1px solid var(--line); border-radius:11px; padding:14px; background:var(--panel); margin-bottom:10px}
+  .log-item .lh{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:6px}
+  .log-item .lh .d{font-weight:700}
+  .log-item .lh .sc{color:var(--accent2); font-weight:600; font-size:13.5px}
+  .log-item .lh .rate{margin-left:auto; color:var(--gold); letter-spacing:1px}
+  .log-item .row{font-size:13.5px; margin:4px 0; color:var(--muted)}
+  .log-item .row b{color:var(--ink)}
+  .log-item .acts{margin-top:8px; display:flex; gap:6px}
+  .corpus-item{display:flex; gap:10px; align-items:flex-start; padding:9px 12px; border:1px solid var(--line); border-radius:9px; background:var(--panel); margin-bottom:7px; font-size:14px}
+  .corpus-item .n{color:var(--faint); font-weight:700; flex:0 0 auto}
+  .corpus-item .x{margin-left:auto; cursor:pointer; color:var(--faint); flex:0 0 auto}
+  .corpus-item .x:hover{color:var(--bad)}
+  .stat{text-align:center; padding:16px; border:1px solid var(--line); border-radius:12px; background:var(--panel)}
+  .stat .v{font-size:28px; font-weight:800; color:var(--accent2)}
+  .stat .l{font-size:12.5px; color:var(--muted)}
+
+  .empty{color:var(--faint); font-size:13.5px; padding:14px; text-align:center; border:1px dashed var(--line); border-radius:10px}
+
+  /* Toast */
+  #toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); opacity:0; pointer-events:none;
+    background:var(--ink); color:var(--bg); padding:11px 18px; border-radius:10px; font-weight:600; font-size:14px; box-shadow:var(--shadow); z-index:200; transition:.25s}
+  #toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+  .hr{height:1px; background:var(--line); border:0; margin:22px 0}
+  .muted{color:var(--muted)} .small{font-size:13px}
+  details.help summary{cursor:pointer; color:var(--accent2); font-weight:600; font-size:13.5px}
+  textarea.export-box{min-height:240px; font-family:"SFMono-Regular",ui-monospace,Menlo,monospace; font-size:12.5px; line-height:1.5}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hbar">
+      <div class="logo">🎓 牛津英语冲刺台<span class="sub">Oxford English Sprint · 12 周</span></div>
+      <div class="countdown">
+        <div class="cd-item"><div class="cd-num" id="cd-days">—</div><div class="cd-lab">距牛津 (天)</div></div>
+        <div class="cd-item"><div class="cd-num" id="cd-streak">0</div><div class="cd-lab">连续打卡</div></div>
+        <div class="cd-item"><div class="cd-num" id="cd-week">W1</div><div class="cd-lab">当前周</div></div>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <div class="tab active" data-t="today">01 今天练什么</div>
+      <div class="tab" data-t="scenarios">02 场景演练</div>
+      <div class="tab" data-t="roadmap">03 12 周路线图</div>
+      <div class="tab" data-t="resources">04 资源库</div>
+      <div class="tab" data-t="phrases">05 应急句库</div>
+      <div class="tab" data-t="progress">06 我的进度</div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============ 01 TODAY ============ -->
+<section id="today" class="active">
+  <div class="h2">今天练什么</div>
+  <p class="lede">每天分四块，顺序很重要，不要打乱。核心不是"补全英语"，是把你大脑里已有的英文，从"想 5 秒"压到"想 1 秒"——密度、自动化、场景化。</p>
+
+  <div class="block">
+    <div class="badge">A</div>
+    <div>
+      <h4>听力输入 <span class="time">· 25 分钟</span></h4>
+      <p>选一段 5–10 分钟英音材料：<b>盲听一遍 → 看文本再听一遍 → 盲听一遍</b>。重点不是"听懂内容"，是让耳朵适应连读、弱读、英式语调。材料见「资源库」。</p>
+    </div>
+  </div>
+  <div class="block">
+    <div class="badge">B</div>
+    <div>
+      <h4>影子跟读 <span class="time">· 20 分钟</span></h4>
+      <p>用同段材料的前 2–3 分钟，<b>跟着原音同步说</b>，直到能 90% 跟上。这一步同时提升流利度和发音——比单独练发音高效得多。</p>
+    </div>
+  </div>
+  <div class="block">
+    <div class="badge">C</div>
+    <div>
+      <h4>和 Claude 语音对话 <span class="time">· 30–35 分钟</span></h4>
+      <p>每天一个场景，Claude 扮演对手（导师、房东、店员……），你应对。结束让它给你三条反馈：<b>一条卡顿、一条更地道的说法、一条发音</b>。去「场景演练」一键复制今天的练习指令。</p>
+    </div>
+  </div>
+  <div class="block">
+    <div class="badge">D</div>
+    <div>
+      <h4>复盘 <span class="time">· 10 分钟</span></h4>
+      <p>把今天 C 环节里你"<b>想说但没说出</b>"的那 3–5 句话，写进「我的进度 → 练习日志」+ 录音背熟。这是你的个人语料库，比任何单词书有用。</p>
+    </div>
+  </div>
+
+  <div class="tip">⏱️ <b>只有 60 分钟的日子：</b>保留 <b>A + C</b>，砍掉 B 和 D。别让"做不完整套"变成今天不练的借口——连续性比完整性重要。</div>
+
+  <div class="btn-row" style="margin-top:18px">
+    <button class="btn primary" onclick="go('scenarios')">→ 去选今天的场景</button>
+    <button class="btn" onclick="quickCheckin()">✓ 今天已打卡</button>
+  </div>
+</section>
+
+<!-- ============ 02 SCENARIOS ============ -->
+<section id="scenarios">
+  <div class="h2">场景演练</div>
+  <p class="lede">这是核心功能。点任意卡片的「复制练习指令」，把角色扮演 prompt 复制到剪贴板，粘贴给 Claude 即可立刻开练。<span class="pill hot">红色</span>=高压场景，提前演练过，真发生时应激反应会完全不同。</p>
+
+  <div class="h3">🏠 生活硬骨头（一个人去，前两个月强度最高）</div>
+  <div class="grid g2" id="scn-life"></div>
+
+  <div class="h3">🎓 学术场景（导师英国本地、组里没中国同胞，没有缓冲）</div>
+  <div class="grid g2" id="scn-acad"></div>
+
+  <details class="help" style="margin-top:18px">
+    <summary>为什么是"复制指令"而不是直接开练？</summary>
+    <p class="small muted" style="margin-top:8px">这是个纯本地网页，没有连后端。点击会把写好的角色扮演 prompt 复制到剪贴板，你切到 Claude（claude.ai 或 Claude Code）粘贴发送即可。指令里已经写好了角色、难度、和"结束给三条反馈"的要求。</p>
+  </details>
+</section>
+
+<!-- ============ 03 ROADMAP ============ -->
+<section id="roadmap">
+  <div class="h2">12 周路线图</div>
+  <p class="lede">三阶段：<b>重建耳朵 → 场景突击 → 实战桥接</b>。每周锁定一个主题，每天打开就知道练什么，不用自己再做决策——决策成本对坚持是致命的。</p>
+  <div id="roadmap-list"></div>
+
+  <div class="card" style="margin-top:18px; border-color:color-mix(in srgb,var(--gold) 40%,var(--line))">
+    <div class="h3" style="margin-top:0">关于"信心"</div>
+    <p class="small">你的信心不会来自"英语变好了"——那是结果，不是来源。信心来自三件事：</p>
+    <p class="small">① <b>你提前知道 90% 场景会发生什么</b>。社交闲聊和组会其实高度模板化，我们就是要把模板背熟。<br>
+    ② <b>你提前听过未来同事的声音</b>。第一天 seminar 不陌生，本身就稳定情绪。<br>
+    ③ <b>你在低风险环境（和 Claude）失败过几百次</b>。真正场合的失败就不可怕。</p>
+  </div>
+</section>
+
+<!-- ============ 04 RESOURCES ============ -->
+<section id="resources">
+  <div class="h2">资源库</div>
+  <p class="lede">全部核实过的真链接。带 <span class="star">★</span> 的最对口你的人文地理 / 城市规划。<span class="pill note">官方</span>=到牛津后第一时间能用的官方资源。</p>
+
+  <div class="h3">📰 带文本的真实新闻 / 听力（A 环节最佳：盲听 → 看文本 → 再听）</div>
+  <p class="small muted" style="margin-top:-6px">这些都<b>有逐字文本（transcript）或字幕</b>，是 A 环节核对听力的关键。优先用这一组。</p>
+  <div class="grid g2" id="res-news"></div>
+
+  <div class="h3">每日听力主材料（英音 · A 环节）</div>
+  <div class="grid g2" id="res-daily"></div>
+
+  <div class="h3">★ 你领域的学术材料（人文地理 / 城市 / 牛津）</div>
+  <div class="grid g2" id="res-field"></div>
+
+  <div class="h3">影子跟读 / 入门（B 环节起步）</div>
+  <div class="grid g2" id="res-shadow"></div>
+
+  <div class="h3">真人对话 & 到牛津后的官方资源</div>
+  <div class="grid g2" id="res-human"></div>
+</section>
+
+<!-- ============ 05 PHRASES ============ -->
+<section id="phrases">
+  <div class="h2">应急句库</div>
+  <p class="lede">整块（chunk）记忆——你的问题不是词不够，是不能把词组成块脱口而出。所以记忆单位是整句整块，不是单词。</p>
+
+  <div class="h3">🔓 英式间接表达解码（导师不会直说 "wrong"）</div>
+  <p class="small muted" style="margin-top:-6px">英国人极少直接否定。听懂下面这些"温和说法"背后的真实意思，是和英国本地导师沟通的关键。</p>
+  <div id="decode-list"></div>
+
+  <div class="h3">🆘 万能应急句（卡壳时的救命整块）</div>
+  <div id="phrase-list"></div>
+
+  <div class="h3">🎓 学术讨论高频整块</div>
+  <div id="phrase-acad"></div>
+</section>
+
+<!-- ============ 06 PROGRESS ============ -->
+<section id="progress">
+  <div class="h2">我的进度</div>
+  <p class="lede">数据全部存在你浏览器本地（localStorage），双击打开就能存、刷新不丢。练一阵后点「导出给 Claude」，把记录粘回去让它给你针对性反馈。</p>
+
+  <div class="grid g3" style="margin-bottom:22px">
+    <div class="stat"><div class="v" id="stat-streak">0</div><div class="l">连续打卡 (天)</div></div>
+    <div class="stat"><div class="v" id="stat-sessions">0</div><div class="l">练习记录 (次)</div></div>
+    <div class="stat"><div class="v" id="stat-corpus">0</div><div class="l">语料库 (句)</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <div class="field" style="margin-bottom:0">
+      <label>到达牛津日期（用于倒计时）</label>
+      <input type="date" id="arrival" onchange="saveArrival()">
+    </div>
+  </div>
+
+  <div class="h3" style="margin-top:8px">＋ 新增一次练习记录</div>
+  <div class="card" style="margin-bottom:22px">
+    <div class="grid g2">
+      <div class="field"><label>日期</label><input type="date" id="f-date"></div>
+      <div class="field"><label>场景</label><select id="f-scn"></select></div>
+    </div>
+    <div class="field">
+      <label>自评（这次表现）</label>
+      <div class="stars" id="f-stars">
+        <span class="s" data-v="1">★</span><span class="s" data-v="2">★</span><span class="s" data-v="3">★</span><span class="s" data-v="4">★</span><span class="s" data-v="5">★</span>
+      </div>
+    </div>
+    <div class="field"><label>卡住的地方（哪里没接上、哪个词想不起来）</label><textarea id="f-stuck" rows="2" placeholder="例：想说'我不太同意这个前提'，但卡住了，只憋出 no..."></textarea></div>
+    <div class="field"><label>想说但没说出的话（保存后自动进语料库）</label><textarea id="f-unsaid" rows="3" placeholder="一行一句英文。例：&#10;I'm not entirely convinced by that premise.&#10;Could you give me a moment to gather my thoughts?"></textarea></div>
+    <div class="field" style="margin-bottom:14px"><label>Claude 的反馈（把它给你的反馈粘回来存档，可留空）</label><textarea id="f-fb" rows="2"></textarea></div>
+    <button class="btn primary" onclick="addSession()">保存这次记录</button>
+  </div>
+
+  <div class="h3">📋 练习日志</div>
+  <div id="log-list"></div>
+
+  <div class="h3">🗂️ 个人语料库</div>
+  <div id="corpus-list"></div>
+
+  <hr class="hr">
+  <div class="h3" style="margin-top:0">📤 导出给 Claude</div>
+  <p class="small muted" style="margin-top:-4px">把所有记录整理成干净的 Markdown，复制后粘回 claude.ai，说一句"这是我这两周的记录，帮我看看该重点补哪里"。</p>
+  <div class="btn-row" style="margin-bottom:12px">
+    <button class="btn primary" onclick="doExport()">生成并复制导出文本</button>
+    <button class="btn ghost" onclick="clearAll()">⚠︎ 清空所有数据</button>
+  </div>
+  <textarea class="export-box" id="export-box" readonly placeholder="点上面的按钮生成导出文本…"></textarea>
+</section>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+/* ===================== STORAGE (localStorage, 双击可用) ===================== */
+const KEYS = { arrival:'arrival_date', corpus:'corpus_v1', checkins:'checkins_v1', sessions:'sessions_v1' };
+function load(k, def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } }
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ toast('保存失败：浏览器存储不可用'); return false; } }
+
+let corpus   = load(KEYS.corpus, []);        // [string]
+let checkins = load(KEYS.checkins, []);       // [yyyy-mm-dd]
+let sessions = load(KEYS.sessions, []);       // [{id,date,scn,rate,stuck,unsaid,fb}]
+let arrival  = load(KEYS.arrival, '2026-08-31');
+
+/* ===================== DATA: SCENARIOS ===================== */
+const SCN_LIFE = [
+  {em:'📞', t:'电话约看房', hot:false, d:'Letting agent 语速极快、专业词多、没耐心——这是你到英国第一周最大的英语考验，比组会难。',
+   p:`你扮演一个英国 letting agent（Oxford 本地，语速偏快、语气职业但有点没耐心）。我打电话想预约看一套两居室公寓（看到的是 Rightmove 上的房源）。请用真实的英式电话节奏和我对话：问我什么时候方便、问我是不是 student 还是 working、提到 viewing 的安排、可能提到 deposit / references / guarantor。结束后用中文给我三条反馈：①哪里卡顿 ②一句更地道的说法 ③一个发音问题。`},
+  {em:'🔑', t:'现场看房 viewing', hot:false, d:'现场提问清单：朝向、暖气、网络、council tax band、押金保护、退租条款。',
+   p:`你扮演 letting agent 带我看房（现场 viewing）。我需要主动提问：采光、heating（gas / electric）、broadband、council tax band、谁负责维修、deposit 怎么保护（deposit protection scheme）、最短租期、能不能养宠物。请自然地回答并偶尔反问我。结束用中文给三条反馈（卡顿/更地道说法/发音）。`},
+  {em:'💷', t:'和房东争押金', hot:true, d:'退租时房东说要扣押金，你要据理力争——高压、需要坚定但礼貌。',
+   p:`【高压场景】你扮演一个想找借口扣我押金（deposit）的英国房东，理由含糊（说墙上有痕迹、地毯脏）。我要据理力争：要求提供 check-in / check-out 报告、提醒押金在 deposit protection scheme 里、要求书面 itemised deductions、必要时提到 dispute resolution。请扮演得有点不情愿、给我真实压力。结束用中文给三条反馈，并额外点评我"坚定但礼貌"的程度。`},
+  {em:'🏦', t:'银行开户 / 信用卡', hot:false, d:'你没有 UK credit history，主流银行要预约+地址证明。先用 Monzo/Starling 手机开户的话术。',
+   p:`你扮演英国银行（Barclays 或 Monzo 客服）。我刚到英国、是 Oxford 的 postdoc、还没有 proof of address、没有 UK credit history，想开一个 current account 并问信用卡。请真实地问我要哪些文件、解释为什么新来的人办主流信用卡难、引导我先建立 credit history。教我怎么解释"我是新来的、还没有 proof of address"。结束用中文给三条反馈。`},
+  {em:'🩺', t:'GP 注册 (NHS)', hot:false, d:'一到就办，别拖到生病。注册流程的对话。',
+   p:`你扮演 GP surgery 的前台 receptionist。我刚搬到 Oxford，想注册成为新病人（register with a GP）。请问我要 proof of address、NHS number（我可能没有）、之前的病史，并解释 registration 流程。结束用中文给三条反馈。`},
+  {em:'🤒', t:'向医生描述症状', hot:true, d:'一个人在国外，能准确描述身体不适极重要。',
+   p:`【高压场景】你扮演 NHS 的 GP 医生。我来看病，需要描述症状（你可以设定一个常见情况让我练，比如持续咳嗽 / 失眠 / 胃痛）。请像真实医生一样追问：多久了、有多严重、什么时候加重、吃过什么药、有没有过敏。引导我学会用英文准确描述身体感受（sharp / dull / throbbing pain 等）。结束用中文给三条反馈 + 一份"看病常用句"小清单。`},
+  {em:'☎️', t:'电话客服扯皮', hot:false, d:'Wi-Fi 安装 / council tax / 包裹丢了——每一个都是电话英语场景。',
+   p:`你扮演英国某服务公司的电话客服（可选：宽带安装延误 / council tax 账单有误 / 快递公司说包裹丢了）。请扮演得官僚一点、需要我反复说明问题、core information 要我提供 account number / reference 等。我要练习清楚陈述问题、坚持要个结果。结束用中文给三条反馈。`},
+  {em:'☕', t:'日常：点单/问路/超市', hot:false, d:'低风险高频，用来热身、把"想1秒"练成"想0.5秒"。',
+   p:`你扮演英国的店员 / 路人，我们快速过几个日常微场景：在 café 点单（含定制：oat milk、extra shot）、在超市找东西、向路人问路、在 pub 点一杯啤酒。请快节奏、自然口语、带一点英式表达（cheers, you alright?, no worries）。结束用中文给三条反馈。`},
+  {em:'🍻', t:'Pub / 邻居 small talk', hot:false, d:'被问"how are you settling in?"怎么不只是"fine, thanks"。',
+   p:`你扮演刚认识的英国邻居 / pub 里旁边的本地人。我们闲聊（small talk）：weather、你周末干嘛、你从哪来、settling in 怎么样、聊聊 Oxford。请用英式含蓄风格（多用 understatement、weather 起头），并在我只会答"fine thanks"时引导我多说两句。结束用中文给三条反馈。`},
+  {em:'🍽️', t:'College formal dinner', hot:false, d:'牛津特色社交场，礼仪+话题都要会接。',
+   p:`你扮演 Oxford college formal dinner 上坐我旁边的 fellow（可能是历史系教授或别系 postdoc）。我们边吃边聊：互相介绍研究、聊学院传统、聊学术八卦、聊你来牛津的感受。请营造一点正式社交的氛围，话题在专业和闲聊间切换。结束用中文给三条反馈。`},
+];
+const SCN_ACAD = [
+  {em:'👋', t:'自我介绍 + 聊研究 (CanisCity)', hot:false, d:'准备好 30秒/2分钟/5分钟 三个版本，背熟到被打断还能接回来。我的 MSCA 课题：CanisCity（人-狗城市互动）。',
+   p:`你扮演我新认识的同事 / 别系学者。请让我做自我介绍并介绍我的研究。我是 Oxford 的 MSCA-PF postdoc，研究领域是人文地理 / 城市规划，我的项目叫 CanisCity——研究人与狗在城市空间中的互动（human–dog interaction in urban space），涉及公共空间使用、城市设计、人与动物的关系。先让我说 30 秒版，然后追问把我引到 2 分钟版，中途打断我一次看我能不能接回来。结束用中文给三条反馈，并帮我把卡壳处改成更顺的整块表达。`},
+  {em:'🧑‍🏫', t:'和导师 1-on-1', hot:false, d:'英国本地导师：质疑很含蓄（"have you considered…"），你要听懂这是在质疑。',
+   p:`你扮演我的导师（英国本地、资深、风格含蓄而严谨）。我的 MSCA 项目是 CanisCity（人-狗城市互动）。这是一次 1-on-1 进度会：我汇报进展，你用英式间接方式质疑我的数据和方法（"I'm not sure I follow…", "have you considered…", "that's interesting, but…"）。我要听懂潜台词并得体回应。结束用中文给三条反馈，并指出哪几处你其实是在质疑我、我有没有接住。`},
+  {em:'🗣️', t:'组会 present + Q&A', hot:false, d:'怎么开场、Q&A 怎么应对一个你没听懂的问题、怎么礼貌打断补充。',
+   p:`你扮演组会（group seminar）的听众/PI。我做一个简短 present（我会即兴讲我的研究项目 CanisCity——人与狗在城市空间中的互动），然后你提 2-3 个问题，其中一个故意问得快/含糊，逼我练"我没完全听懂时怎么礼貌请对方重述"。也练我怎么礼貌打断、怎么说"good question, let me think"。结束用中文给三条反馈 + 一份"Q&A 救命句"。`},
+  {em:'🚪', t:'第一天见导师', hot:true, d:'第 12 周完整模拟：第一天到牛津，和导师初次见面 30 分钟。',
+   p:`【高压·里程碑模拟】你扮演我的导师，这是我到牛津的第一天、我们第一次正式见面（约 15-20 分钟）。请覆盖：寒暄 settling in、聊我的 background、聊接下来两年的 project 方向和期待（我的项目是 CanisCity，人-狗城市互动）、问我有没有问题、安排下次见面。请贴近真实英国资深学者的语气。结束用中文做一次完整复盘：整体印象、3 个亮点、3 个要改的地方、5 句我应该背下来的整块表达。`},
+];
+
+/* ===================== DATA: ROADMAP ===================== */
+const ROADMAP = [
+  {wk:'W1–4', phase:1, t:'重建耳朵 + 解封被动词汇', sub:'让英文重新变成"声音"而不是"文字"',
+   body:`目标：把"想 5 秒再开口"压到"想 1 秒"。`,
+   pts:['听力：BBC Radio 4 <b>Thinking Allowed</b>（社会学/城市，主持人口音清晰）、<b>More or Less</b>、<b>LSE Public Lectures</b>',
+        '影子跟读从 <b>TED</b> 起步（语速慢、字幕全），第 3 周切到 BBC podcast',
+        '和 Claude 的场景每天换：自我介绍、聊研究、聊家乡、聊牛津、点咖啡、问路、迷路'],
+   ms:'第 4 周末：开口前的"翻译延迟"明显缩短；能盲听懂 Thinking Allowed 主线'},
+  {wk:'W5–6', phase:2, t:'场景突击 · 学术', sub:'你真正要面对的学术沟通',
+   body:`和英国本地导师沟通有具体的英式特征——他们极少直说"this is wrong"。`,
+   pts:['W5：学术 1-on-1（汇报进度、被质疑数据怎么回应、提需求）',
+        'W6：组会 / Seminar（present 开场、Q&A 应对没听懂的问题、礼貌打断补充）',
+        '每个场景先做一遍 simulation→反馈→再做一遍'],
+   ms:'第 6 周末：有一套"学术应急句"，能接住导师的间接质疑'},
+  {wk:'W7–8', phase:2, t:'场景突击 · 生活硬骨头', sub:'一个人去、全部自理——前两个月真正的重头',
+   body:`你和导师一周可能就见 1-2 次，但和房东、银行、网络、水电气、超市、邻居的接触是<b>每天的</b>。`,
+   pts:['W7：租房全流程（Rightmove→询问邮件→电话约看→现场 viewing→签约关键问题）',
+        'W7：银行/信用卡（无 UK credit history 的现实路径：先 Monzo/Starling）、GP 注册',
+        'W8：Council Tax / TV License / water / Wi-Fi 安装——每个都是电话或邮件场景'],
+   ms:'第 8 周末：30 句"万能应急库"，覆盖 90% 生活卡壳时刻'},
+  {wk:'W9–10', phase:3, t:'实战桥接 · 社交 + 真人', sub:'开始接触真实世界的紧张感',
+   body:`和真人对话有 Claude 永远给不了的紧张感——这一步很关键。`,
+   pts:['找 italki / Cambly 英国本地 tutor，每周 2 次×30 分钟，专练你领域话题',
+        '把牛津 School of Geography 近期 seminar 录像当听力——听未来同事的声音',
+        '社交：college formal、pub small talk、邻居闲聊、"how are you settling in"'],
+   ms:'第 10 周末：能和真人 tutor 顺畅讨论你的研究 20 分钟'},
+  {wk:'W11–12', phase:3, t:'实战桥接 · 危机模拟 + 总演练', sub:'把"心里有底"变成信心',
+   body:`提前演练过的高压场景，真发生时应激反应会完全不同。`,
+   pts:['危机模拟：扣押金据理力争、包裹丢了打电话、GP 描述症状、信用卡盗刷、被搭讪礼貌脱身',
+        '准备"研究 3 分钟版 + 10 分钟版"，背熟到被打断还能接回来',
+        'W12 总演练：第一天到牛津与导师初见 30 分钟，全程录音复盘'],
+   ms:'第 12 周末：完成"第一天见导师"完整模拟，自评信心明显提升'},
+];
+
+/* ===================== DATA: RESOURCES ===================== */
+const RES = {
+  news:[
+    {t:'BBC Learning English — 6 Minute English', star:true, meta:'★ 6 分钟 · 每集附完整 transcript + 生词', url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english', d:'最适合你的 A 环节：标准英音、6 分钟正好、每集底部有逐字稿和重点词。盲听→对照 transcript→再听一遍。'},
+    {t:'BBC News — Video & 文字报道', star:false, meta:'真实新闻 · 视频带字幕 + 配套文字', url:'https://www.bbc.com/news', d:'每条视频新闻通常配一篇文字稿，用文字当"transcript"核对。练真实语速和时事话题。'},
+    {t:'BBC Radio 4 — Today (节目精华)', star:false, meta:'英国早间旗舰新闻 · 快语速', url:'https://www.bbc.co.uk/programmes/b006qj9z', d:'英国人每天早上听的新闻访谈，语速快、口音真实——第 3 周后挑战用。'},
+    {t:'The Guardian — Audio / Today in Focus', star:true, meta:'★ 深度新闻播客 · 多数有 transcript', url:'https://www.theguardian.com/news/series/todayinfocus', d:'每集一个话题深聊，常涉及城市、社会、政策，和你领域贴近；网页多附文字稿。'},
+    {t:'TED Talks（带 transcript）', star:false, meta:'点开任意演讲 · Transcript 按钮', url:'https://www.ted.com/talks', d:'每个演讲都能展开逐字稿、可点句子跳转，B 环节影子跟读+A 环节核对两用。'},
+    {t:'BBC Learning English — News Review', star:true, meta:'★ 用新闻教地道表达 · 附文字', url:'https://www.bbc.co.uk/learningenglish/english/features/news-review', d:'拿当天真实新闻讲里面的高频表达和搭配，附完整文字稿。学"地道整块"的好来源。'},
+  ],
+  daily:[
+    {t:'BBC Radio 4 — Thinking Allowed', star:true, meta:'Podcast · 社会学/城市议题', url:'https://www.bbc.co.uk/programmes/b006qy05', d:'主持人 Laurie Taylor 口音清晰，话题常涉及城市、社会、空间——和你领域高度对口。'},
+    {t:'BBC Radio 4 — More or Less', star:false, meta:'Podcast · 数据与统计', url:'https://www.bbc.co.uk/programmes/b006qshd', d:'用日常英语讲数字背后的故事，语速适中，练"听懂论证逻辑"。'},
+    {t:'BBC Sounds', star:false, meta:'App / 网站 · 英音总库', url:'https://www.bbc.co.uk/sounds', d:'Radio 4 全部节目入口，可下载离线听。A 环节主材料来源。'},
+    {t:'LSE Public Lectures and Events', star:true, meta:'Podcast / YouTube · 社科', url:'https://www.lse.ac.uk/lse-player', d:'几百场城市、政策、社会议题讲座，学术英语+真实问答，特别对口社科。'},
+  ],
+  field:[
+    {t:'Oxford School of Geography & the Environment — Podcasts', star:true, meta:'★ 你未来的学院', url:'https://www.geog.ox.ac.uk/', d:'听你未来同事/学院的讲座和讲者声音。到了之后熟悉感会强很多。'},
+    {t:'Future of Cities (Oxford)', star:true, meta:'★ 城市议题系列', url:'https://www.futureofcities.ox.ac.uk/', d:'牛津自己的城市未来讲座系列，主题正中你的人文地理/城市规划。'},
+    {t:'RGS-IBG (Royal Geographical Society)', star:true, meta:'地理学会 · 讲座/资源', url:'https://www.rgs.org/', d:'英国地理学界的公共讲座与资源，专业词汇+英式学术表达。'},
+    {t:'LSE Cities', star:true, meta:'★ 城市研究中心', url:'https://www.lse.ac.uk/cities', d:'城市研究的报告、讲座、访谈——专业语料和你的研究语境一致。'},
+  ],
+  shadow:[
+    {t:'TED Talks', star:false, meta:'影子跟读起步 · 字幕全', url:'https://www.ted.com/talks', d:'语速慢、字幕全、可调速，B 环节第 1-2 周的理想起步材料。'},
+    {t:'YouGlish (英式)', star:true, meta:'查"某个词英国人怎么读"', url:'https://youglish.com/english/uk', d:'输入任意单词/短语，看英国人在真实视频里怎么发音——练发音神器。'},
+    {t:'BBC Learning English — Pronunciation', star:false, meta:'发音/连读专项', url:'https://www.bbc.co.uk/learningenglish', d:'连读、弱读、语调的系统小课，配合 B 环节查漏补缺。'},
+  ],
+  human:[
+    {t:'Oxford Language Centre — Academic English', star:true, meta:'官方 · 到牛津后第一时间报名', url:'https://www.lang.ox.ac.uk/academic-english', d:'对国际教职/访问学者开放（门槛约 C1 / IELTS 7，你正好够）：口语沟通课、一对一辅导、强化班。免费/低价官方资源。'},
+    {t:'italki', star:false, meta:'真人 1-on-1 tutor', url:'https://www.italki.com/', d:'第 9-12 周找英国本地 tutor，每周 2 次×30 分钟，专练你领域话题。'},
+    {t:'Cambly', star:false, meta:'随时连线英语母语者', url:'https://www.cambly.com/', d:'即时连线，适合练"真人紧张感"和快速反应。'},
+    {t:'Rightmove', star:false, meta:'练租房场景的真实素材', url:'https://www.rightmove.co.uk/', d:'第 7 周练租房时的真实房源来源：看房源描述、练专业词、模拟发询问邮件。'},
+  ],
+};
+
+/* ===================== DATA: PHRASES ===================== */
+const DECODE = [
+  {says:'"I\'m not sure I follow."', means:'我不觉得你说得通 / 这里有问题。<b>是在质疑</b>，不是真没跟上。'},
+  {says:'"Have you considered…?"', means:'你这里漏了一个重要的点。<b>是在指出缺陷</b>。'},
+  {says:'"That\'s interesting, but…"', means:'"but" 后面才是重点，前半句是缓冲。<b>真实态度在 but 之后</b>。'},
+  {says:'"It might be worth …ing."', means:'你应该去做这件事。<b>是建议/要求</b>，不是"可有可无"。'},
+  {says:'"I hear what you\'re saying."', means:'我听到了，但<b>我不同意</b>。'},
+  {says:'"With the greatest respect…"', means:'接下来是直接反对。<b>越客气，分歧越大</b>。'},
+  {says:'"That\'s one way of looking at it."', means:'我不这么看。<b>礼貌的不认同</b>。'},
+  {says:'"We\'ll see."', means:'大概率不会发生。<b>软性拒绝</b>。'},
+];
+const PHRASES_SOS = [
+  {en:'Sorry, could you say that again? / Could you rephrase that?', zh:'没听懂时——别愣着，直接请对方重说/换种说法。'},
+  {en:'Let me think about that for a second.', zh:'给自己争取思考时间，比沉默自然得多。'},
+  {en:'If I understand you correctly, you mean…', zh:'确认对方意思，同时把球接稳。'},
+  {en:'Sorry, I didn\'t quite catch the last part.', zh:'只没听清后半句时——精准说明，不必全部重来。'},
+  {en:'Bear with me a moment.', zh:'"稍等我一下"——查东西/组织语言时的地道说法。'},
+  {en:'That\'s a good question. Let me come back to you on that.', zh:'被问倒时——承认+延后，不丢面子。'},
+  {en:'Just to clarify, do you mean … or …?', zh:'主动澄清歧义，显得专业又稳。'},
+  {en:'Sorry to interrupt, but could I add something here?', zh:'礼貌打断+补充，组会必备。'},
+];
+const PHRASES_ACAD = [
+  {en:'I\'m not entirely convinced by that premise, because…', zh:'礼貌但明确地不同意一个前提。'},
+  {en:'That\'s a fair point, but I\'d push back on…', zh:'先认可再反驳——英式学术讨论的标准节奏。'},
+  {en:'Could you elaborate on the methodology?', zh:'请对方展开讲方法——seminar 提问高频句。'},
+  {en:'My research broadly sits at the intersection of urban geography and…', zh:'介绍研究定位的万能开场句型。'},
+  {en:'I\'d frame it slightly differently:…', zh:'温和地提出另一种看法。'},
+  {en:'What\'s the broader contribution here?', zh:'追问研究意义——也是别人会问你的问题，先准备好答案。'},
+];
+
+/* ===================== RENDER ===================== */
+function scnCard(s){
+  return `<div class="scn ${s.hot?'hot':''}">
+    <div class="top"><span class="em">${s.em}</span><h4>${s.t}</h4></div>
+    <div class="desc">${s.d}</div>
+    <div>${s.hot?'<span class="pill hot">高压</span>':''}</div>
+    <button class="btn primary sm" onclick='copyPrompt(${JSON.stringify(s.p)})'>📋 复制练习指令</button>
+  </div>`;
+}
+function renderScenarios(){
+  document.getElementById('scn-life').innerHTML = SCN_LIFE.map(scnCard).join('');
+  document.getElementById('scn-acad').innerHTML = SCN_ACAD.map(scnCard).join('');
+}
+function renderRoadmap(){
+  document.getElementById('roadmap-list').innerHTML = ROADMAP.map(w=>`
+    <details class="week">
+      <summary><span class="wk p${w.phase}">${w.wk}</span><span class="wt">${w.t}</span><span class="wsub">${w.sub}</span></summary>
+      <div class="body">
+        <p>${w.body}</p>
+        <ul>${w.pts.map(p=>`<li>${p}</li>`).join('')}</ul>
+        <div class="milestone">🎯 <b>里程碑</b> · ${w.ms}</div>
+      </div>
+    </details>`).join('');
+}
+function resCard(r){
+  return `<div class="res">
+    <h4>${r.star?'<span class="star">★</span> ':''}<a href="${r.url}" target="_blank" rel="noopener">${r.t} ↗</a></h4>
+    <div class="meta">${r.meta}</div>
+    <p>${r.d}</p>
+  </div>`;
+}
+function renderResources(){
+  document.getElementById('res-news').innerHTML = RES.news.map(resCard).join('');
+  document.getElementById('res-daily').innerHTML = RES.daily.map(resCard).join('');
+  document.getElementById('res-field').innerHTML = RES.field.map(resCard).join('');
+  document.getElementById('res-shadow').innerHTML = RES.shadow.map(resCard).join('');
+  document.getElementById('res-human').innerHTML = RES.human.map(resCard).join('');
+}
+function renderPhrases(){
+  document.getElementById('decode-list').innerHTML = DECODE.map(d=>`
+    <div class="decode"><div class="says">${d.says}</div><div class="means">${d.means}</div></div>`).join('');
+  document.getElementById('phrase-list').innerHTML = PHRASES_SOS.map(p=>`
+    <div class="phrase"><div class="en">${p.en}</div><div class="zh">${p.zh}</div></div>`).join('');
+  document.getElementById('phrase-acad').innerHTML = PHRASES_ACAD.map(p=>`
+    <div class="phrase"><div class="en">${p.en}</div><div class="zh">${p.zh}</div></div>`).join('');
+}
+
+/* ===================== TABS ===================== */
+function go(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active', el.dataset.t===t));
+  document.querySelectorAll('section').forEach(el=>el.classList.toggle('active', el.id===t));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.getElementById('tabs').addEventListener('click', e=>{ if(e.target.dataset.t) go(e.target.dataset.t); });
+
+/* ===================== CLIPBOARD ===================== */
+async function copyPrompt(p){
+  try{ await navigator.clipboard.writeText(p); toast('✅ 练习指令已复制，粘贴给 Claude 即可开练'); }
+  catch(e){ fallbackCopy(p); }
+}
+function fallbackCopy(text){
+  const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); toast('✅ 已复制，粘贴给 Claude'); }
+  catch(e){ toast('复制失败，请手动选择'); }
+  document.body.removeChild(ta);
+}
+
+/* ===================== TOAST ===================== */
+let toastT;
+function toast(msg){
+  const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'), 2200);
+}
+
+/* ===================== COUNTDOWN / STREAK ===================== */
+function todayStr(){ const d=new Date(); return d.toISOString().slice(0,10); }
+function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
+function currentWeek(){
+  // week 1 starts today-relative isn't meaningful; base on first checkin or fallback W1
+  if(checkins.length===0) return 1;
+  const first = checkins.slice().sort()[0];
+  const wk = Math.floor(daysBetween(first, todayStr())/7)+1;
+  return Math.min(Math.max(wk,1),12);
+}
+function computeStreak(){
+  if(checkins.length===0) return 0;
+  const set=new Set(checkins); let streak=0; let d=new Date();
+  // allow today not yet checked: start from today; if today missing, start from yesterday
+  if(!set.has(todayStr())) d.setDate(d.getDate()-1);
+  for(;;){ const s=d.toISOString().slice(0,10); if(set.has(s)){ streak++; d.setDate(d.getDate()-1);} else break; }
+  return streak;
+}
+function refreshHeader(){
+  const left = arrival ? daysBetween(todayStr(), arrival) : null;
+  document.getElementById('cd-days').textContent = (left===null||isNaN(left)) ? '—' : Math.max(left,0);
+  const streak=computeStreak();
+  document.getElementById('cd-streak').textContent = streak;
+  document.getElementById('cd-week').textContent = 'W'+currentWeek();
+  document.getElementById('stat-streak').textContent = streak;
+  document.getElementById('stat-sessions').textContent = sessions.length;
+  document.getElementById('stat-corpus').textContent = corpus.length;
+}
+
+/* ===================== CHECK-IN ===================== */
+function quickCheckin(){
+  const t=todayStr();
+  if(checkins.includes(t)){ toast('今天已经打过卡啦 ✓'); return; }
+  checkins.push(t); save(KEYS.checkins, checkins); refreshHeader(); toast('✅ 打卡成功！连续 '+computeStreak()+' 天');
+}
+
+/* ===================== ARRIVAL ===================== */
+function saveArrival(){
+  arrival=document.getElementById('arrival').value; save(KEYS.arrival, arrival); refreshHeader();
+  toast('已保存到达日期');
+}
+
+/* ===================== SESSIONS ===================== */
+let curRate=0;
+function initStars(){
+  document.querySelectorAll('#f-stars .s').forEach(s=>{
+    s.addEventListener('click', ()=>{ curRate=+s.dataset.v; paintStars(); });
+  });
+}
+function paintStars(){ document.querySelectorAll('#f-stars .s').forEach(s=>s.classList.toggle('on', +s.dataset.v<=curRate)); }
+function fillScnSelect(){
+  const all=[...SCN_LIFE, ...SCN_ACAD];
+  document.getElementById('f-scn').innerHTML =
+    all.map(s=>`<option>${s.em} ${s.t}</option>`).join('') + `<option>✏️ 其它（自定义）</option>`;
+}
+function addSession(){
+  const date=document.getElementById('f-date').value || todayStr();
+  const scn=document.getElementById('f-scn').value;
+  const stuck=document.getElementById('f-stuck').value.trim();
+  const unsaid=document.getElementById('f-unsaid').value.trim();
+  const fb=document.getElementById('f-fb').value.trim();
+  if(!stuck && !unsaid && !fb){ toast('至少填一项内容再保存'); return; }
+  sessions.unshift({id:Date.now(), date, scn, rate:curRate, stuck, unsaid, fb});
+  save(KEYS.sessions, sessions);
+  // sync unsaid lines into corpus
+  if(unsaid){
+    unsaid.split('\n').map(x=>x.trim()).filter(Boolean).forEach(line=>{ if(!corpus.includes(line)) corpus.push(line); });
+    save(KEYS.corpus, corpus);
+  }
+  // auto check-in on this date
+  if(!checkins.includes(date)){ checkins.push(date); save(KEYS.checkins, checkins); }
+  // reset form
+  document.getElementById('f-stuck').value=''; document.getElementById('f-unsaid').value=''; document.getElementById('f-fb').value='';
+  curRate=0; paintStars();
+  renderLog(); renderCorpus(); refreshHeader(); toast('✅ 已保存，并同步到语料库');
+}
+function delSession(id){
+  if(!confirm('删除这条练习记录？')) return;
+  sessions=sessions.filter(s=>s.id!==id); save(KEYS.sessions, sessions); renderLog(); refreshHeader();
+}
+function editSession(id){
+  const s=sessions.find(x=>x.id===id); if(!s) return;
+  go('progress');
+  document.getElementById('f-date').value=s.date;
+  document.getElementById('f-scn').value=[...SCN_LIFE,...SCN_ACAD].some(x=>(x.em+' '+x.t)===s.scn)?s.scn:'✏️ 其它（自定义）';
+  document.getElementById('f-stuck').value=s.stuck; document.getElementById('f-unsaid').value=s.unsaid; document.getElementById('f-fb').value=s.fb;
+  curRate=s.rate||0; paintStars();
+  delSession(id); // remove old; re-save on submit. (confirm inside)
+  document.querySelector('#f-stuck').scrollIntoView({behavior:'smooth'});
+  toast('已载入到表单，修改后重新保存');
+}
+function stars(n){ return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n); }
+function renderLog(){
+  const el=document.getElementById('log-list');
+  if(sessions.length===0){ el.innerHTML='<div class="empty">还没有练习记录。完成一次 C 环节后，在上面记下来。</div>'; return; }
+  el.innerHTML = sessions.map(s=>`
+    <div class="log-item">
+      <div class="lh"><span class="d">${s.date}</span><span class="sc">${s.scn}</span>${s.rate?`<span class="rate">${stars(s.rate)}</span>`:''}</div>
+      ${s.stuck?`<div class="row"><b>卡住：</b>${esc(s.stuck)}</div>`:''}
+      ${s.unsaid?`<div class="row"><b>想说没说出：</b>${esc(s.unsaid).replace(/\n/g,'<br>')}</div>`:''}
+      ${s.fb?`<div class="row"><b>Claude 反馈：</b>${esc(s.fb).replace(/\n/g,'<br>')}</div>`:''}
+      <div class="acts"><button class="btn sm" onclick="editSession(${s.id})">编辑</button><button class="btn sm ghost" onclick="delSession(${s.id})">删除</button></div>
+    </div>`).join('');
+}
+function renderCorpus(){
+  const el=document.getElementById('corpus-list');
+  if(corpus.length===0){ el.innerHTML='<div class="empty">语料库为空。在练习记录里填"想说但没说出的话"，会自动收进这里。</div>'; return; }
+  el.innerHTML = corpus.map((c,i)=>`
+    <div class="corpus-item"><span class="n">${i+1}</span><span>${esc(c)}</span><span class="x" onclick="delCorpus(${i})" title="删除">✕</span></div>`).join('');
+}
+function delCorpus(i){ corpus.splice(i,1); save(KEYS.corpus, corpus); renderCorpus(); refreshHeader(); }
+function esc(s){ return (s||'').replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+/* ===================== EXPORT ===================== */
+function doExport(){
+  const left = arrival ? Math.max(daysBetween(todayStr(), arrival),0) : '?';
+  let md = `# 英语练习导出 · ${todayStr()}\n连续打卡 ${computeStreak()} 天 · 距牛津还有 ${left} 天\n\n`;
+  md += `## 最近练习记录（最多 14 条）\n`;
+  if(sessions.length===0){ md+='（暂无）\n'; }
+  else sessions.slice(0,14).forEach(s=>{
+    md += `### ${s.date} · ${s.scn} · 自评 ${s.rate||'-'}/5\n`;
+    if(s.stuck)  md += `- 卡住：${s.stuck.replace(/\n/g,' ')}\n`;
+    if(s.unsaid) md += `- 想说没说出：${s.unsaid.replace(/\n/g,' / ')}\n`;
+    if(s.fb)     md += `- 上次反馈：${s.fb.replace(/\n/g,' ')}\n`;
+    md += `\n`;
+  });
+  md += `## 个人语料库（共 ${corpus.length} 句）\n`;
+  if(corpus.length===0){ md+='（暂无）\n'; }
+  else corpus.forEach((c,i)=>{ md += `${i+1}. ${c}\n`; });
+
+  document.getElementById('export-box').value = md;
+  navigator.clipboard.writeText(md).then(
+    ()=>toast('✅ 导出文本已复制，粘回 claude.ai 即可'),
+    ()=>toast('已生成，请手动复制下方文本框')
+  );
+}
+
+/* ===================== CLEAR ===================== */
+function clearAll(){
+  if(!confirm('⚠️ 这会清空所有打卡、练习记录和语料库，且无法恢复。确定吗？')) return;
+  if(!confirm('再确认一次：真的要全部清空？')) return;
+  [KEYS.corpus, KEYS.checkins, KEYS.sessions].forEach(k=>localStorage.removeItem(k));
+  corpus=[]; checkins=[]; sessions=[];
+  renderLog(); renderCorpus(); refreshHeader(); toast('已清空');
+}
+
+/* ===================== INIT ===================== */
+function init(){
+  renderScenarios(); renderRoadmap(); renderResources(); renderPhrases();
+  fillScnSelect(); initStars();
+  document.getElementById('arrival').value = arrival;
+  document.getElementById('f-date').value = todayStr();
+  renderLog(); renderCorpus(); refreshHeader();
+}
+init();
+</script>
+</body>
+</html>
