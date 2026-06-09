@@ -178,6 +178,69 @@
   .muted{color:var(--muted)} .small{font-size:13px}
   details.help summary{cursor:pointer; color:var(--accent2); font-weight:600; font-size:13.5px}
   textarea.export-box{min-height:240px; font-family:"SFMono-Regular",ui-monospace,Menlo,monospace; font-size:12.5px; line-height:1.5}
+
+  /* ===== MOBILE ===== */
+  #bottom-nav{display:none}
+  @media (max-width:640px){
+    .wrap{padding:0 14px}
+    /* header */
+    .hbar{flex-wrap:wrap; gap:4px; padding:9px 0 3px}
+    .logo{font-size:15px; width:100%}
+    .logo .sub{display:none}
+    .countdown{margin-left:0; gap:16px; width:100%; justify-content:flex-start; padding-bottom:4px}
+    .cd-num{font-size:18px}
+    .cd-lab{font-size:10px}
+    /* hide top tabs → replaced by bottom nav */
+    nav.tabs{display:none}
+    /* main */
+    main{padding:16px 0 100px}
+    .h2{font-size:19px}
+    .lede{font-size:14px}
+    .h3{font-size:13px; margin:20px 0 10px}
+    /* bigger touch targets */
+    .btn{padding:12px 16px; font-size:14.5px; min-height:44px}
+    .btn.sm{padding:10px 14px; font-size:13.5px; min-height:44px}
+    .tab{min-height:44px; display:flex; align-items:center}
+    /* daily blocks */
+    .block{padding:13px}
+    .block h4{font-size:15px}
+    /* roadmap */
+    .week summary{padding:13px 13px; flex-wrap:wrap; row-gap:4px}
+    .week .wsub{display:none}
+    .week .body{padding:0 13px 13px; font-size:13.5px}
+    /* phrases */
+    .phrase .en{font-size:14.5px}
+    /* stats */
+    .stat .v{font-size:24px}
+    /* stars bigger tap area */
+    .stars .s{font-size:30px; padding:4px}
+    /* forms */
+    input[type=text],input[type=date],input[type=number],select,textarea{font-size:16px}/* prevent iOS zoom */
+    /* toast higher to avoid bottom nav */
+    #toast{bottom:80px}
+  }
+
+  /* bottom nav */
+  @media (max-width:640px){
+    #bottom-nav{
+      display:flex; position:fixed; bottom:0; left:0; right:0; z-index:60;
+      background:color-mix(in srgb,var(--bg) 96%,transparent);
+      backdrop-filter:saturate(160%) blur(14px);
+      -webkit-backdrop-filter:saturate(160%) blur(14px);
+      border-top:1px solid var(--line);
+      padding-bottom:max(env(safe-area-inset-bottom),6px);
+    }
+    .bn-item{
+      flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:7px 2px 5px; cursor:pointer; border:none; background:none;
+      color:var(--faint); font-family:inherit; font-size:9.5px; font-weight:700;
+      gap:2px; min-width:0; user-select:none; -webkit-tap-highlight-color:transparent;
+    }
+    .bn-icon{font-size:21px; line-height:1.15}
+    .bn-label{line-height:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; letter-spacing:.1px}
+    .bn-item.active{color:var(--accent)}
+    .bn-item.active .bn-icon{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--accent) 60%,transparent))}
+  }
 </style>
 </head>
 <body>
@@ -370,6 +433,15 @@
 </section>
 
 </main>
+
+<nav id="bottom-nav">
+  <button class="bn-item active" data-t="today"><span class="bn-icon">📋</span><span class="bn-label">今天</span></button>
+  <button class="bn-item" data-t="scenarios"><span class="bn-icon">🎭</span><span class="bn-label">场景</span></button>
+  <button class="bn-item" data-t="roadmap"><span class="bn-icon">🗓</span><span class="bn-label">路线图</span></button>
+  <button class="bn-item" data-t="resources"><span class="bn-icon">📚</span><span class="bn-label">资源</span></button>
+  <button class="bn-item" data-t="phrases"><span class="bn-icon">💬</span><span class="bn-label">句库</span></button>
+  <button class="bn-item" data-t="progress"><span class="bn-icon">📊</span><span class="bn-label">进度</span></button>
+</nav>
 
 <div id="toast"></div>
 
@@ -567,10 +639,12 @@ function renderPhrases(){
 /* ===================== TABS ===================== */
 function go(t){
   document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active', el.dataset.t===t));
+  document.querySelectorAll('.bn-item').forEach(el=>el.classList.toggle('active', el.dataset.t===t));
   document.querySelectorAll('section').forEach(el=>el.classList.toggle('active', el.id===t));
   window.scrollTo({top:0, behavior:'smooth'});
 }
 document.getElementById('tabs').addEventListener('click', e=>{ if(e.target.dataset.t) go(e.target.dataset.t); });
+document.getElementById('bottom-nav').addEventListener('click', e=>{ const b=e.target.closest('.bn-item'); if(b&&b.dataset.t) go(b.dataset.t); });
 
 /* ===================== CLIPBOARD ===================== */
 async function copyPrompt(p){
